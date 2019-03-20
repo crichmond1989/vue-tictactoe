@@ -1,16 +1,36 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import vue from "vue";
+import vuex, { Store } from "vuex";
+import IBoard from "./models/IBoard";
+import IPlayer from "./models/IPlayer";
 
-Vue.use(Vuex);
+vue.use(vuex);
 
-export default new Vuex.Store({
+export default new Store({
   state: {
-
+    board: {
+      a1: { player: undefined },
+      a2: { player: undefined },
+      a3: { player: undefined },
+      b1: { player: undefined },
+      b2: { player: undefined },
+      b3: { player: undefined },
+      c1: { player: undefined },
+      c2: { player: undefined },
+      c3: { player: undefined },
+    } as IBoard,
+    players: {
+      a: {
+        color: "red",
+        icon: "x",
+        name: "Chris",
+      },
+      b: {
+        color: "blue",
+        icon: "o",
+        name: "Joy",
+      },
+    } as { [_: string]: IPlayer },
   },
-  mutations: {
-
-  },
-  actions: {
-
-  },
+  mutations: {},
+  actions: {},
 });
