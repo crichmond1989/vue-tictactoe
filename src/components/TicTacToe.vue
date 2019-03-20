@@ -2,23 +2,35 @@
   <div class="container" v-if="current">
     <div class="row">
       <div class="col col-lg-6">
-        <div class="row">
-          <div class="col">
-            <h3 class="mb-3">Current Player: {{ current.name }}</h3>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="mb-3 text-center board-title">
+              <span
+                v-bind:class="current === players.a && 'current'"
+                v-bind:style="{ 'border-bottom-color': players.a.color }"
+              >{{ players.a.name }}</span>
+              <span class="mx-2">vs.</span>
+              <span
+                v-bind:class="current === players.b && 'current'"
+                v-bind:style="{ 'border-bottom-color': players.b.color }"
+              >{{ players.b.name }}</span>
+            </h3>
           </div>
-        </div>
-        <div class="row">
-          <div
-            v-for="[key, value] in Object.entries(board)"
-            v-bind:key="key"
-            v-bind:class="['col-4 square d-flex align-items-center justify-content-center', value.player ? 'played' : 'unplayed']"
-            @click="playSquare($event, key, value)"
-          >
-            <div>
-              <i
-                v-bind:class="(value.player || current).icon"
-                v-bind:style="{ color: (value.player || current).color }"
-              ></i>
+          <div class="card-body">
+            <div class="row">
+              <div
+                v-for="[key, value] in Object.entries(board)"
+                v-bind:key="key"
+                v-bind:class="['col-4 square d-flex align-items-center justify-content-center', value.player ? 'played' : 'unplayed']"
+                @click="playSquare($event, key, value)"
+              >
+                <div>
+                  <i
+                    v-bind:class="(value.player || current).icon"
+                    v-bind:style="{ color: (value.player || current).color }"
+                  ></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -63,6 +75,21 @@ export default class TicTacToe extends Vue {
 <style lang="scss" scoped>
 $borderSize: 2px;
 
+.board-title {
+  > span {
+    border-bottom: 2px solid;
+
+    &.current {
+      transition: 500ms ease-in;
+    }
+
+    &:not(.current) {
+      transition: 500ms ease-out;
+      border-bottom-color: transparent !important;
+    }
+  }
+}
+
 .square {
   margin-top: -$borderSize;
   margin-left: -$borderSize;
@@ -94,7 +121,7 @@ $borderSize: 2px;
   }
 
   > div {
-    transition: opacity 0.5s linear;
+    transition: opacity 500ms ease-in;
   }
 
   &.played > div {
