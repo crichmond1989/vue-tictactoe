@@ -31,6 +31,14 @@ export default new Store({
       },
     } as { [_: string]: IPlayer },
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    playCell(state, { key, player }: { key: keyof IBoard; player: IPlayer }) {
+      state.board[key]!.player = player;
+    },
+  },
+  actions: {
+    playCell({ commit }, payload: { key: keyof IBoard; player: IPlayer }) {
+      commit("playCell", payload);
+    },
+  },
 });

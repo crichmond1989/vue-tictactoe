@@ -1,20 +1,26 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="current">
     <div class="row">
-      <div class="col">Current Player: {{ current && current.name }}</div>
-    </div>
-    <div class="row">
-      <div
-        v-for="[key, value] in Object.entries(board)"
-        v-bind:key="key"
-        v-bind:class="['col-4 square d-flex align-items-center justify-content-center', value.player ? 'played' : 'unplayed']"
-        @click="playSquare($event, key, value)"
-      >
-        <div>
-          <i
-            v-bind:class="(value.player || current).icon"
-            v-bind:style="{ color: (value.player || current).color }"
-          ></i>
+      <div class="col col-lg-6">
+        <div class="row">
+          <div class="col">
+            <h3 class="mb-3">Current Player: {{ current.name }}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            v-for="[key, value] in Object.entries(board)"
+            v-bind:key="key"
+            v-bind:class="['col-4 square d-flex align-items-center justify-content-center', value.player ? 'played' : 'unplayed']"
+            @click="playSquare($event, key, value)"
+          >
+            <div>
+              <i
+                v-bind:class="(value.player || current).icon"
+                v-bind:style="{ color: (value.player || current).color }"
+              ></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -23,7 +29,7 @@
 
 <script lang="ts">
 import { Component, Vue, Model } from "vue-property-decorator";
-import { State } from "vuex-class";
+import { State, Action } from "vuex-class";
 import IBoard from "@/models/IBoard";
 import IPlayer from "@/models/IPlayer";
 import ICell from "@/models/ICell";
@@ -32,6 +38,7 @@ import ICell from "@/models/ICell";
 export default class TicTacToe extends Vue {
   @State board!: IBoard;
   @State players!: { [_: string]: IPlayer };
+  @Action playCell!: (payload: { key: keyof IBoard; player: IPlayer }) => void;
 
   public current: IPlayer | null = null;
 
@@ -46,7 +53,8 @@ export default class TicTacToe extends Vue {
       return null;
     }
 
-    this.board[key]!.player = this.current!;
+    this.playCell({ key, player: this.current! });
+
     this.current = this.current === this.players.a ? this.players.b : this.players.a;
   }
 }
@@ -86,7 +94,7 @@ $borderSize: 2px;
   }
 
   > div {
-    transition: opacity 1s linear;
+    transition: opacity 0.5s linear;
   }
 
   &.played > div {
